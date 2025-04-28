@@ -1,10 +1,8 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+This is a Next.js project bootstrapped with create-next-app.
 
-## Getting Started
-
+Getting Started
 First, run the development server:
 
-```bash
 npm run dev
 # or
 yarn dev
@@ -12,25 +10,116 @@ yarn dev
 pnpm dev
 # or
 bun dev
+Open http://localhost:3000 with your browser to see the result.
+
+You can start editing the page by modifying app/page.tsx. The page auto-updates as you edit the file.
+
+This project uses next/font to automatically optimize and load Geist, a new font family for Vercel.
+
+
+######################################################################################################################
+📚 Episode 06 - How to Create Routes and Navigate Between Pages in Next.js 15
+In this episode, we will learn:
+
+How to create new routes in Next.js 15
+
+How layouts and pages work together
+
+How to navigate between pages using client-side navigation
+
+🛠️ Creating a New Route
+In the app folder, you don't create a .tsx file directly.
+Instead, you create a folder to define a route.
+
+Example: Create a product route
+Inside the app/ folder, create a folder called product/.
+
+Inside product/, create a file named page.tsx.
+
+Important: The file must be named page.tsx so that Next.js recognizes it as a route.
+
+Here’s what the page.tsx file looks like:
+
+tsx
+Copier
+Modifier
+export default function ProductPage() {
+return <h1>Hello from the Product page!</h1>;
+}
+Now, if you navigate to:
+
+bash
+Copier
+Modifier
+http://localhost:3000/product
+You will see:
+
+Hello from the Product page!
+
+The layout (if you have one) stays the same, and only the children are updated.
+
+📦 Another Example: Creating a user Route
+In the app/ folder, create a folder named user/.
+
+Inside user/, create a page.tsx file.
+
+Example:
+
+```
+export default function UserPage() {
+return <h1>Hello from the User page!</h1>;
+}
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Now, if you navigate to:
+http://localhost:3000/user
+You'll see the content from the User page, while the layout remains persistent.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+🔗 Navigating Between Pages
+To navigate between pages, we use the Link component from Next.js.
+It provides client-side navigation, which is faster and preloads pages automatically.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+In your index.tsx (home page), update the content:
 
-## Learn More
+```
+import Link from 'next/link';
 
-To learn more about Next.js, take a look at the following resources:
+export default function HomePage() {
+return (
+<div>
+<h1>Hello from the index page!</h1>
+<Link href="/product">Go to Product</Link>
+<br />
+<Link href="/user">Go to User</Link>
+</div>
+);
+}
+```
+❓ Why Not Use <a> Tags Directly?
+If you use a standard <a> tag, Next.js will perform a hard refresh (the whole page reloads).
+Using the Link component enables:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+✅ Client-side navigation
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+✅ Prefetching routes automatically
 
-## Deploy on Vercel
+✅ Better user experience
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+✅ Faster navigation
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+💡 Quick Summary
+Create a folder for each route.
+
+Add a page.tsx inside each folder.
+
+Use layouts to wrap pages and keep persistent UI.
+
+Use Link from next/link for smooth client-side navigation.
+
+That's all for Episode 05! 🎬
+Now you know how to create routes and navigate between pages in Next.js 15.
+
+👉 In the next episode, we'll cover dynamic routes and fetching data inside pages!
+
+
+###########################################################################################################################
