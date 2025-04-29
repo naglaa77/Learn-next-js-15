@@ -154,7 +154,13 @@ for more detail about hydration error : [https://nextjs.org/docs/messages/react-
 
 ##########################################################################
 
-🎬 06-Second solution_Solving Hydration Mismatch  Caused by Browser Extensions in Next.js
+## 🎬 Episode 06 – A Professional Fix for Hydration Mismatch in Next.js (Browser Extension Issue)
+
+In the **previous episode**, we used `useEffect` to remove an unwanted attribute (`cz-shortcut-listen`) added by a browser extension like ColorZilla. This worked — but **only after a page refresh** because `useEffect` runs **after hydration**, and the mismatch had already occurred.
+
+In this episode, we apply a **professional and permanent solution** that avoids the error on **first load**, without relying on page refreshes.
+
+---
 
 Why the Error Disappears on Refresh in Your Solution
 The behavior you're seeing occurs because of the sequence of events during Next.js hydration and how browser extensions interact with this process. Here's the detailed explanation:

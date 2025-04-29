@@ -1,5 +1,7 @@
 // import { BodyCleaner } from "@/components/BodyCleaner";
+import { BodyCleaner } from "@/components/BodyCleaner";
 import ClientLayout from "@/components/ClientLayout";
+// import ClientLayout from "@/components/ClientLayout";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 
@@ -30,11 +32,9 @@ export default function RootLayout({
       >
         {/* <BodyCleaner />
         <p>navbar from layout</p>
+
         {children} */}
-        <ClientLayout>
-          <p>navbar from layout</p>
-          {children}
-        </ClientLayout>
+        <ClientLayout>{children}</ClientLayout>
       </body>
     </html>
   );
