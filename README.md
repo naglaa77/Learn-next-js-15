@@ -44,10 +44,9 @@ These extensions can inject extra attributes into your page before React has a c
 
 For example, you might find something weird like:*
 
-html
-Copier
-Modifier
-<body cz-shortcut-listen="true">
+
+<body cz-shortcut-listen="true">\
+
 This attribute wasn't sent from your server.
 But on the client side, it’s there — and when React tries to "hydrate" — meaning match the server and client HTML — it spots the mismatch and throws an error."
 
@@ -117,9 +116,7 @@ export function BodyCleaner() {
 }
 🔹 Finally, use it inside your layout.tsx:
 
-tsx
-Copier
-Modifier
+
 import { BodyCleaner } from "@/components/BodyCleaner";
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -152,11 +149,176 @@ And you never have to think about it again!"*
 Outro 🎥
 *"Alright, I hope this helped you understand hydration mismatches better — especially those sneaky ones caused by browser extensions!
 
+for more detail about hydration error : [https://nextjs.org/docs/messages/react-hydration-error#solution-1-using-useeffect-to-run-on-the-client-only] 
+
+
+##########################################################################
+
+🎬 06-Second solution_Solving Hydration Mismatch  Caused by Browser Extensions in Next.js
+
+Why the Error Disappears on Refresh in Your Solution
+The behavior you're seeing occurs because of the sequence of events during Next.js hydration and how browser extensions interact with this process. Here's the detailed explanation:
+
+What's Happening in Your Current Solution
+First Load (with error):
+
+Server sends clean HTML without cz-shortcut-listen
+
+Browser receives HTML and starts parsing
+
+ColorZilla extension injects the attribute
+
+React begins hydration, sees the attribute mismatch → error
+
+Your useEffect cleanup runs and removes the attribute
+
+Error appears in console
+
+Page Refresh (no error):
+
+Browser already has React hydrated in memory
+
+The "hard" refresh doesn't trigger full rehydration
+
+Your cleanup runs before React checks the DOM
+
+No mismatch detected → no error
+
+The Key Timing Issues
+First Render Hydration:
+
+React compares server-rendered snapshot with current DOM
+
+The comparison happens before your useEffect runs
+
+Mismatch detected → hydration error
+
+Subsequent Updates:
+
+React is already hydrated
+
+Changes to DOM don't trigger hydration checks
+
+Your cleanup works as expected
+
+Why This Matters for Your Solution
+Your current approach with useEffect has these characteristics:
+
+Runs after component mounts (too late for hydration)
+
+Only affects future renders, not initial hydration
+
+Works on refreshes because hydration is already complete
+
+How to Properly Fix This:
+
+1. Create the Hydration Fix Component (TypeScript version)
+
+```
+// components/HydrationFix.tsx
+"use client";
+import React from "react";
+export function HydrationFix(): React.JSX.Element {
+  return (
+    <script
+      id="hydration-fix"
+      dangerouslySetInnerHTML={{
+        __html: `
+          // Check and remove immediately
+          if (document.body.hasAttribute('cz-shortcut-listen')) {
+            document.body.removeAttribute('cz-shortcut-listen');
+          }
+          
+          // Set up mutation observer to prevent re-addition
+          const observer = new MutationObserver((mutations) => {
+            mutations.forEach((mutation) => {
+              if (mutation.type === 'attributes' && 
+                  mutation.attributeName === 'cz-shortcut-listen') {
+                document.body.removeAttribute('cz-shortcut-listen');
+              }
+            });
+          });
+          
+          observer.observe(document.body, {
+            attributes: true,
+            attributeFilter: ['cz-shortcut-listen']
+          });
+        `,
+      }}
+    />
+  );
+}
+```
+2. Create components/ClientLayout.tsx
+
+```
+'use client';
+
+import { HydrationFix } from './HydrationFix';
+
+export default function ClientLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <>
+      <HydrationFix />
+      <p>navbar from layout</p>
+      {children}
+    </>
+  );
+}
+```
+3. Update your layout.tsx to use ClientLayout
+
+```
+import type { Metadata } from 'next';
+import { Geist, Geist_Mono } from 'next/font/google';
+import ClientLayout from '@/components/ClientLayout';
+
+const geistSans = Geist({ variable: '--font-geist-sans', subsets: ['latin'] });
+const geistMono = Geist_Mono({ variable: '--font-geist-mono', subsets: ['latin'] });
+
+export const metadata: Metadata = {
+  title: 'Learn Next.js 15',
+  description: 'A comprehensive guide to learning Next.js 15',
+};
+
+export default function RootLayout({ children }: { children: React.ReactNode }) {
+  return (
+    <html lang="en">
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <ClientLayout>{children}</ClientLayout>
+      </body>
+    </html>
+  );
+}
+```
+
+🤔 Why Keep the Previous useEffect Episode?
+We don’t delete the earlier solution because:
+
+It helps explain how hydration works in React
+
+It's useful for beginners learning useEffect and DOM timing
+
+It sets the stage for understanding why this script-based fix is necessary
+
+🧠 Takeaway
+This professional approach:
+
+Solves hydration mismatch on first load
+
+Prevents reappearance of the issue using MutationObserver
+
+Keeps your layout.tsx as a server component for better SEO and performance
+
+✅ Clean DOM
+✅ No flickering
+✅ No hydration warnings
+✅ Ready for production
 
 ##########################################################################
 
 
-📚 Episode 06 - How to Create Routes and Navigate Between Pages in Next.js 15
+📚 Episode 07 - How to Create Routes and Navigate Between Pages in Next.js 15
 
 In this episode, we will learn:
 
