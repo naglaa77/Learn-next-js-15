@@ -9,6 +9,7 @@ export default function ClientLayout({
 }) {
   return (
     <>
+      <h2>Navbar form layout</h2>
       <HydrationFix />
       {children}
     </>
