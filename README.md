@@ -18,7 +18,7 @@ This project uses next/font to automatically optimize and load Geist, a new font
 
 #########################################################################
 
-🎬 05_Solving Hydration Mismatch Caused by Browser Extensions in Next.js
+# ## 🎬 Episode 05 - Solving Hydration Mismatch Caused by Browser Extensions in Next.js
 
 
 Introduction 🎥
@@ -324,7 +324,7 @@ Keeps your layout.tsx as a server component for better SEO and performance
 ##########################################################################
 
 
-📚 Episode 07 - How to Create Routes and Navigate Between Pages in Next.js 15
+# ## 🎬 Episode 07 - How to Create Routes in Next.js 15
 
 In this episode, we will learn:
 
@@ -347,17 +347,14 @@ Important: The file must be named page.tsx so that Next.js recognizes it as a ro
 
 Here’s what the page.tsx file looks like:
 
-tsx
-Copier
-Modifier
+```
 export default function ProductPage() {
 return <h1>Hello from the Product page!</h1>;
 }
+```
+
 Now, if you navigate to:
 
-bash
-Copier
-Modifier
 http://localhost:3000/product
 You will see:
 
@@ -373,13 +370,13 @@ Inside user/, create a page.tsx file.
 Example:
 
 ```
-export default function UserPage() {
+export default function AboutPage() {
 return <h1>Hello from the User page!</h1>;
 }
 ```
 
 Now, if you navigate to:
-http://localhost:3000/user
+http://localhost:3000/about
 You'll see the content from the User page, while the layout remains persistent.
 
 🔗 Navigating Between Pages
@@ -388,45 +385,111 @@ It provides client-side navigation, which is faster and preloads pages automatic
 
 In your index.tsx (home page), update the content:
 
-```
-import Link from 'next/link';
 
-export default function HomePage() {
-return (
-<div>
-<h1>Hello from the index page!</h1>
-<Link href="/product">Go to Product</Link>
-<br />
-<Link href="/user">Go to User</Link>
-</div>
-);
-}
-```
-❓ Why Not Use <a> Tags Directly?
-If you use a standard <a> tag, Next.js will perform a hard refresh (the whole page reloads).
-Using the Link component enables:
 
-✅ Client-side navigation
-
-✅ Prefetching routes automatically
-
-✅ Better user experience
-
-✅ Faster navigation
-
-💡 Quick Summary
-Create a folder for each route.
-
-Add a page.tsx inside each folder.
-
-Use layouts to wrap pages and keep persistent UI.
-
-Use Link from next/link for smooth client-side navigation.
-
-That's all for Episode 05! 🎬
-Now you know how to create routes and navigate between pages in Next.js 15.
-
-👉 In the next episode, we'll cover dynamic routes and fetching data inside pages!
 
 
 ######################################################################
+
+# ## 🎬 Episode 08 - Nested Routes & Group Routes in Next.js 15
+
+In this episode, we explain how to use **Nested Routes** and **Group Routes** in Next.js 15 to build a well-structured and scalable application.
+
+### 🔹 What are Nested Routes?
+Nested routes in Next.js are created by using folders inside the `app/` directory. 
+### 🔹 What are Group Routes?
+Group routes use parentheses in folder names, like `(auth)`, to **group related pages** without affecting the URL. 
+
+📽️ Watch the full episode to see it all in action!
+
+######################################################################
+
+
+# ## 🎬 Episode 09 – Server vs Client Components (React Server Components – RSC)
+
+## 📌 Introduction
+
+Before we dive into routing in Next.js, there's one powerful concept we need to master first — and that's **React Server Components**, or **RSC** for short.
+
+## 🧠 What is RSC?
+
+**React Server Components (RSC)** is a modern architecture introduced by the React team. It allows us to run some components **only on the server**. This improves performance, SEO, and reduces the JavaScript bundle size.
+
+Next.js (especially with the App Router) adopted RSC by default.
+
+In this model, components are categorized into two types:
+
+- **Server Components**  
+- **Client Components**
+
+---
+
+## 🔷 Server Components (default)
+
+In a Next.js App Router setup:
+
+- All components are **Server Components by default**.
+- These components are rendered on the **server only**.
+- They can:
+  - Fetch data directly
+  - Access databases or the file system
+  - Improve SEO
+  - Reduce client-side bundle size
+
+**❌ Limitations:**
+
+- Cannot use React hooks (`useState`, `useEffect`, etc.)
+- Cannot access browser APIs (`window`, `document`, etc.)
+- No interactivity
+
+### ✅ Example: Server Component
+
+```tsx
+// app/about/page.tsx
+export default function AboutPage() {
+  console.log("About Server Component");
+  return <h1>About Page</h1>;
+}
+
+🔶 Client Components
+To create a Client Component, you must add the directive:
+```tsx
+"use client";
+
+This tells Next.js to run this component in the browser.
+
+Client Components can:
+
+- Use React hooks
+
+- Handle interactivity
+
+- Access browser APIs (e.g., localStorage, window, etc.)
+
+✅ Example: Client Component
+
+```tsx
+// app/products/page.tsx
+"use client";
+import { useState } from "react";
+
+export default function ProductsPage() {
+  const [search, setSearch] = useState("");
+
+  return (
+    <div>
+      <h1>About Page</h1>
+      <input value={search} onChange={(e) => setSearch(e.target.value)} />
+      <p>Hello {search}</p>
+    </div>
+  );
+}
+
+📋 Summary
+✅ Components in Next.js App Router are Server Components by default.
+
+✍️ Add "use client" to make a component run in the browser.
+
+🔐 Server Components are great for performance, data access, and SEO.
+
+🧠 Client Components are required for interactivity and state management.
