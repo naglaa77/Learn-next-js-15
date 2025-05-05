@@ -453,8 +453,12 @@ export default function AboutPage() {
 
 🔶 Client Components
 To create a Client Component, you must add the directive:
+
 ```tsx
+
 "use client";
+
+```
 
 This tells Next.js to run this component in the browser.
 
@@ -478,7 +482,7 @@ export default function ProductsPage() {
 
   return (
     <div>
-      <h1>About Page</h1>
+      <h1>Products Page</h1>
       <input value={search} onChange={(e) => setSearch(e.target.value)} />
       <p>Hello {search}</p>
     </div>
