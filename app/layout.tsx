@@ -1,6 +1,8 @@
 // import { BodyCleaner } from "@/components/BodyCleaner";
+import "./globals.css";
 import { BodyCleaner } from "@/components/BodyCleaner";
 import ClientLayout from "@/components/ClientLayout";
+
 // import ClientLayout from "@/components/ClientLayout";
 import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
@@ -30,10 +32,6 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        {/* <BodyCleaner />
-        <p>navbar from layout</p>
-
-        {children} */}
         <ClientLayout>{children}</ClientLayout>
       </body>
     </html>

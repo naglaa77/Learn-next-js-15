@@ -1,4 +1,4 @@
 
-export default function Home() {
-  return <div>hell from index page</div>;
+export default function HomePage() {
+  return <main className="p-6 space-y-4 w-full">Home Page</main>;
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { HydrationFix } from "./HydrationFix";
+import Navbar from "@/components/Navbar";
 
 export default function ClientLayout({
   children,
@@ -9,7 +10,7 @@ export default function ClientLayout({
 }) {
   return (
     <>
-      <h2>Navbar form layout</h2>
+      <Navbar />
       <HydrationFix />
       {children}
     </>
