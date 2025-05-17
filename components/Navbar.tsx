@@ -9,9 +9,9 @@ export default function Navbar() {
         </Link>
 
         <div className="space-x-4">
-          <Link href="/dashboard" className="text-blue-600 hover:text-blue-800">
+          <a href="/dashboard" className="text-blue-600 hover:text-blue-800">
             Dashboard
-          </Link>
+          </a>
           <Link href="/about" className="text-blue-600 hover:text-blue-800">
             About
           </Link>

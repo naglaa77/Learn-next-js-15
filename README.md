@@ -497,3 +497,102 @@ export default function ProductsPage() {
 🔐 Server Components are great for performance, data access, and SEO.
 
 🧠 Client Components are required for interactivity and state management.
+
+
+######################################################################
+
+
+# ## 🎬 Episode 10 –  Linking and Navigating in Next.js (App Router)
+
+## 🔗 1. Using the `<Link />` Component (Recommended)
+
+The `<Link />` component from `next/link` enables **client-side navigation** with automatic prefetching in production.
+
+### ✅ Example
+
+```tsx
+import Link from "next/link";
+
+export default function Navbar() {
+  return (
+    <nav className="bg-white shadow-md p-4">
+      <div className="container mx-auto flex justify-between items-center">
+        <Link href="/" className="text-xl font-bold">
+          My App
+        </Link>
+
+        <div className="space-x-4">
+          <a href="/dashboard" className="text-blue-600 hover:text-blue-800">
+            Dashboard
+          </a>
+          <Link href="/about" className="text-blue-600 hover:text-blue-800">
+            About
+          </Link>
+          <Link href="/products" className="text-blue-600 hover:text-blue-800">
+            Products
+          </Link>
+        </div>
+      </div>
+    </nav>
+  );
+}
+```
+✅ Works in Server Components
+
+✅ Supports prefetching
+
+✅ SEO-friendly and accessible
+
+✅ Automatically renders as an <a> tag
+
+
+⚡ 2. Prefetching in Next.js
+Next.js uses prefetching to load routes in the background before the user clicks, which results in faster navigation.
+
+📌 How It Works
+By default, only the shared layout and components above the first loading.js file are prefetched.
+
+Prefetching is only active in production mode.
+
+🧠 Programmatic Prefetching with useRouter
+
+
+Use useRouter() for programmatic navigation, such as buttons or dynamic logic in Client Components.
+
+✅ Example
+```tsx
+"use client";
+import { useState } from "react";
+//import Link from "next/link";
+import { useRouter } from "next/navigation";
+
+export default function ProductsPage() {
+  const [search, setSearch] = useState("");
+
+  const router = useRouter();
+
+  return (
+    <div className="p-4">
+      {/* <Link href="/" className="text-blue-600 underline">
+        Return to Home Page
+      </Link> */}
+      <button
+        type="button"
+        className="underline cursor-pointer"
+        onClick={() => {
+          console.log("form useRouter");
+          router.push("/");
+        }}
+      >
+        Home Page
+      </button>
+      <h1 className="text-2xl text-green-700 mt-4">Products Page</h1>
+      <input value={search} onChange={(e) => setSearch(e.target.value)} />
+      <p>Hello {search}</p>
+    </div>
+  );
+}
+```
+
+
+
