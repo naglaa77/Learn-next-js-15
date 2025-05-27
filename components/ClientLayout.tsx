@@ -2,6 +2,7 @@
 
 import { HydrationFix } from "./HydrationFix";
 import Navbar from "@/components/Navbar";
+import Cart from "@/components/Cart";
 
 export default function ClientLayout({
   children,
@@ -12,7 +13,9 @@ export default function ClientLayout({
     <>
       <Navbar />
       <HydrationFix />
-      {children}
+      <div className="flex">
+        <main className="w-[80%] mx-auto min-h-screen">{children}</main>
+      </div>
     </>
   );
 }

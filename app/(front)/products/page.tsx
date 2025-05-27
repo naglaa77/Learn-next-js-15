@@ -1,31 +1,28 @@
-"use client";
-import { useState } from "react";
-//import Link from "next/link";
-import { useRouter } from "next/navigation";
+import Link from "next/link";
+const products = [
+  { id: "1", name: "iPhone 15", description: "Latest Apple smartphone." },
+  { id: "2", name: "Galaxy S24", description: "Samsung's newest release." },
+  { id: "3", name: "Pixel 8", description: "Google's powerful Android phone." },
+];
 
 export default function ProductsPage() {
-  const [search, setSearch] = useState("");
-
-  const router = useRouter();
-
   return (
     <div className="p-4">
-      {/* <Link href="/" className="text-blue-600 underline">
-        Return to Home Page
-      </Link> */}
-      <button
-        type="button"
-        className="underline cursor-pointer"
-        onClick={() => {
-          console.log("form useRouter");
-          router.push("/");
-        }}
-      >
+      <Link href="/" className="underline text-blue-600">
         Home Page
-      </button>
+      </Link>
+
       <h1 className="text-2xl text-green-700 mt-4">Products Page</h1>
-      <input value={search} onChange={(e) => setSearch(e.target.value)} />
-      <p>Hello {search}</p>
+
+      <ul className="mt-6 space-y-4">
+        {products.map((product) => (
+          <li key={product.id} className="border p-4 hover:bg-gray-100">
+            <Link href={`/products/${product.id}`}>
+              <h2 className="text-xl font-semibold">{product.name}</h2>
+            </Link>
+          </li>
+        ))}
+      </ul>
     </div>
   );
 }
