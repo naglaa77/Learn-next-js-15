@@ -1,9 +1,5 @@
 import Link from "next/link";
-const products = [
-  { id: "1", name: "iPhone 15", description: "Latest Apple smartphone." },
-  { id: "2", name: "Galaxy S24", description: "Samsung's newest release." },
-  { id: "3", name: "Pixel 8", description: "Google's powerful Android phone." },
-];
+import { products } from "@/data/products";
 
 export default function ProductsPage() {
   return (

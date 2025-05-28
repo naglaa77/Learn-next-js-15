@@ -2,7 +2,7 @@
 
 import { HydrationFix } from "./HydrationFix";
 import Navbar from "@/components/Navbar";
-import Cart from "@/components/Cart";
+// import Cart from "@/components/Cart";
 
 export default function ClientLayout({
   children,

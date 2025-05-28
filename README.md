@@ -23,10 +23,10 @@ This project uses next/font to automatically optimize and load Geist, a new font
 
 Introduction 🎥
 
-Today, we’re tackling a common and confusing error you might see when working with Next.js:
+Today, we're tackling a common and confusing error you might see when working with Next.js:
 hydration mismatch caused by browser extensions.
 
-I'll explain exactly why it happens, and show you a clean and professional way to fix it. Let’s dive right in!"*
+I'll explain exactly why it happens, and show you a clean and professional way to fix it. Let's dive right in!"*
 
 Part 1: Understanding the Problem 🎥
 "So picture this:
@@ -35,9 +35,9 @@ You just created a fresh Next.js project, you open it in your browser, and boom 
 Hydration failed because the server rendered HTML didn't match the client.
 
 *But wait… you haven't even written any code yet!
-What’s going on?
+What's going on?
 
-Well, the real problem isn’t your code.
+Well, the real problem isn't your code.
 It's usually caused by a browser extension — things like ColorZilla, Grammarly, or even a password manager.
 
 These extensions can inject extra attributes into your page before React has a chance to load.
@@ -48,23 +48,23 @@ For example, you might find something weird like:*
 <body cz-shortcut-listen="true">\
 
 This attribute wasn't sent from your server.
-But on the client side, it’s there — and when React tries to "hydrate" — meaning match the server and client HTML — it spots the mismatch and throws an error."
+But on the client side, it's there — and when React tries to "hydrate" — meaning match the server and client HTML — it spots the mismatch and throws an error."
 
 Part 2: Why Is It a Problem? 🎥
 *"Now, why should we care?
 
-Well, in development, it’s just annoying.
+Well, in development, it's just annoying.
 But in production, it can slow down your app or even break critical features if the mismatches get worse.
 
 Hydration errors are not something you want to ignore — especially if you're building a professional, reliable app."*
 
 Part 3: How to Solve It Professionally 🎥
-*"Alright, let’s fix this the right way.
+*"Alright, let's fix this the right way.
 
 ✅ First, we don't want to ask developers to disable their extensions while working.
 ✅ Second, we need a solution that automatically cleans up the page only in production — without touching our real app code.
 
-Here’s the clean approach:
+Here's the clean approach:
 
 Create a small React hook that checks the <body> after hydration and removes any unwanted attributes.
 
@@ -72,10 +72,10 @@ Create a tiny Client Component that calls that hook.
 
 Place the component inside your layout's <body> tag.
 
-This way, you keep everything safe, server components still work, and you don’t break anything important."*
+This way, you keep everything safe, server components still work, and you don't break anything important."*
 
 Part 4: Example Code 🎥
-"Let’s see the real code — clean, simple, and production-ready."
+"Let's see the real code — clean, simple, and production-ready."
 
 🔹 First, the hook:
 File: utils/useCleanUnexpectedBodyAttributes.ts
@@ -299,7 +299,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 ```
 
 🤔 Why Keep the Previous useEffect Episode?
-We don’t delete the earlier solution because:
+We don't delete the earlier solution because:
 
 It helps explain how hydration works in React
 
@@ -345,7 +345,7 @@ Inside product/, create a file named page.tsx.
 
 Important: The file must be named page.tsx so that Next.js recognizes it as a route.
 
-Here’s what the page.tsx file looks like:
+Here's what the page.tsx file looks like:
 
 ```
 export default function ProductPage() {
@@ -595,4 +595,205 @@ export default function ProductsPage() {
 ```
 
 
+# ## 🎬 Episode 11 –  Dynamic Routes and Static Generation in Next.js(App Router)
 
+
+## 🎯 Dynamic Routes with `[id]`
+
+Dynamic routes in Next.js allow you to create pages for content where the URL segments (like product IDs) aren't known in advance.
+
+### 📁 File Structure
+```
+app/
+├── products/
+│   ├── page.tsx         # Products list page
+│   └── [id]/
+│       └── page.tsx     # Dynamic product detail page
+```
+
+### 🔑 Key Features
+
+1. **Dynamic Route Definition**
+   - Use square brackets `[id]` to create dynamic segments
+   - Access parameters via `params` prop in page components
+
+### 🔗 products/page.tsx (Server Component)
+```tsx
+import Link from "next/link";
+import { products } from "@/data/products";
+
+export default function ProductsPage() {
+  return (
+    <div className="p-4">
+      <Link href="/" className="underline text-blue-600">Home Page</Link>
+      <h1 className="text-2xl text-green-700 mt-4">Products Page</h1>
+      <ul className="mt-6 space-y-4">
+        {products.map((product) => (
+          <li key={product.id}>
+            <Link
+              href={`/products/${product.id}`}
+              className="block border p-4 hover:bg-gray-100"
+            >
+              <h2 className="text-xl font-semibold">{product.name}</h2>
+            </Link>
+          </li>
+        ))}
+      </ul>
+    </div>
+  );
+}
+```
+
+### 🔑 Dynamic Product Detail Page (Without Static Generation)
+
+```typescript
+// app/products/[id]/page.tsx
+export default async function ProductPageDetail({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const product = products.find((p) => p.id === id);
+
+  if (!product) {
+    return (
+      <div className="p-4">
+        <h1 className="text-2xl font-bold text-red-600">Product not found</h1>
+      </div>
+    );
+  }
+
+  return (
+    <div>
+      <Link href="/products" className="underline text-blue-600">
+        Products Page
+      </Link>
+      <div className="p-4">
+        <h1 className="text-2xl font-bold">{product.name}</h1>
+        <p className="mt-2 text-gray-700">{product.description}</p>
+      </div>
+    </div>
+  );
+}
+```
+
+### 🔑 Dynamic Product Detail Page (With Static Generation)
+
+```typescript
+// app/products/[id]/page.tsx
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { products } from "@/data/products";
+
+export async function generateStaticParams() {
+  return products.map((product) => ({
+    id: product.id,
+  }));
+}
+
+export default function ProductPageDetail({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const product = products.find((p) => p.id === params.id);
+
+  if (!product) {
+    notFound();
+  }
+
+  return (
+    <div className="p-4">
+      <Link href="/products" className="underline text-blue-600">
+        ← Back to Products
+      </Link>
+      <div className="mt-6 border p-4">
+        <h1 className="text-2xl font-bold">{product.name}</h1>
+        <p className="mt-2 text-gray-700">{product.description}</p>
+      </div>
+    </div>
+  );
+}
+```
+⚙️ 3. Understanding Static Generation
+Using generateStaticParams() in a dynamic route tells Next.js to generate the pages at build time.
+
+✅ What happens:
+
+/products/1, /products/2, /products/3 are pre-rendered
+
+Delivered instantly as static HTML
+
+Improves SEO, performance, and user experience
+
+### 🚀 Benefits
+
+| Feature | Without Static Generation | With Static Generation |
+|---------|--------------------------|------------------------|
+| Initial Load | Slower (on-demand) | Instant (pre-rendered) |
+| SEO | Weaker | Excellent |
+| Server Load | Higher | Lower |
+| Best For | Dynamic Data | Static Content |
+
+### 📝 Example Implementation
+
+```typescript
+// app/products/[id]/page.tsx
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { products } from "@/data/products";
+
+export async function generateStaticParams() {
+  return products.map((product) => ({
+    id: product.id,
+  }));
+}
+
+export default function ProductPageDetail({
+  params,
+}: {
+  params: { id: string };
+}) {
+  const product = products.find((p) => p.id === params.id);
+
+  if (!product) {
+    notFound();
+  }
+
+  return (
+    <div className="p-4">
+      <Link href="/products" className="underline text-blue-600">
+        ← Back to Products
+      </Link>
+      <div className="mt-6 border p-4">
+        <h1 className="text-2xl font-bold">{product.name}</h1>
+        <p className="mt-2 text-gray-700">{product.description}</p>
+      </div>
+    </div>
+  );
+}
+```
+
+### 🎯 Best Practices
+
+1. **Use Static Generation When:**
+   - Content is static or rarely changes
+   - SEO is important
+   - Performance is critical
+
+2. **Use Dynamic Routes When:**
+   - Content changes frequently
+   - Data is user-specific
+   - Real-time updates are needed
+### 🔍 Build Output
+```
+Route (app)                                 Size  First Load JS
+└ ● /products/[id]                         181 B         105 kB
+    ├ /products/1
+    ├ /products/2
+    └ /products/3
+```
+- `●` indicates static generation
+- Pages are pre-rendered at build time
+- Instant delivery to users

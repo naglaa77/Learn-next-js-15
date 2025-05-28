@@ -1,10 +1,12 @@
 import Link from "next/link";
+import { products } from "@/data/products";
 
-const products = [
-  { id: "1", name: "iPhone 15", description: "Latest Apple smartphone." },
-  { id: "2", name: "Galaxy S24", description: "Samsung's newest release." },
-  { id: "3", name: "Pixel 8", description: "Google's powerful Android phone." },
-];
+export async function generateStaticParams() {
+  console.log("Generating static pages for products...");
+  return products.map((product) => ({
+    id: product.id,
+  }));
+}
 
 export default async function ProductPageDetail({
   params,

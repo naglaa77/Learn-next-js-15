@@ -1,6 +1,6 @@
 // import { BodyCleaner } from "@/components/BodyCleaner";
 import "./globals.css";
-import { BodyCleaner } from "@/components/BodyCleaner";
+// import { BodyCleaner } from "@/components/BodyCleaner";
 import ClientLayout from "@/components/ClientLayout";
 
 // import ClientLayout from "@/components/ClientLayout";
