@@ -797,3 +797,68 @@ Route (app)                                 Size  First Load JS
 - `●` indicates static generation
 - Pages are pre-rendered at build time
 - Instant delivery to users
+```
+
+# ## 🎬 Episode 12: Nested Dynamic Routes with Async Params
+
+In this episode, we dive deeper into nested dynamic routes using the Next.js App Router. You'll learn how to display a product review using a route like:
+
+```bash
+/products/1/comments/2
+```
+
+This requires handling two dynamic segments:
+- `id` → for the product
+- `commentId` → for the specific comment
+
+## 📁 Folder Structure
+```
+app/
+├── products/
+│   ├── [id]/
+│   │   ├── comments/
+│   │   │   ├── [commentId]/
+│   │   │   │   └── page.tsx ← handles the comment
+│   │   └── page.tsx         ← handles the product
+```
+
+## ⚛️ Code: app/products/[id]/comments/[commentId]/page.tsx
+```typescript
+export default async function ProductReview({
+  params,
+}: {
+  params: Promise<{ productId: string; commentId: string }>;
+}) {
+  const { id, commentId } = await params;
+  return (
+    <h1>
+      Comment {commentId} for product {id}
+    </h1>
+  );
+}
+```
+
+## 🧠 Explanation
+
+| Line | Purpose |
+|------|---------|
+| `async function ProductReview` | This is an async Server Component. |
+| `params: Promise<{ productId; commentId }>` | Next.js passes route params as a Promise. |
+| `await params` | You wait to access productId and commentId. |
+| `return (...)` | The UI shows the comment ID and its related product ID. |
+
+## 🧪 Test It!
+Visit:
+```bash
+http://localhost:3000/products/1/comments/2
+```
+
+You'll see:
+```
+Comment 2 for product 1
+```
+
+✅ You can change the numbers to test other IDs in real-time.
+
+##########################################################################
+
