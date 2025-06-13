@@ -819,7 +819,7 @@ app/
 │   │   ├── comments/
 │   │   │   ├── [commentId]/
 │   │   │   │   └── page.tsx ← handles the comment
-│   │   └── page.tsx         ← handles the product
+│   │   │   └── page.tsx         ← handles the product
 ```
 
 ## ⚛️ Code: app/products/[id]/comments/[commentId]/page.tsx
@@ -859,6 +859,107 @@ Comment 2 for product 1
 ```
 
 ✅ You can change the numbers to test other IDs in real-time.
+
+##########################################################################
+
+## 🎬 Episode 13 - Understanding Catch-all and Optional Catch-all Segments in Next.js
+
+In this episode, we'll explore two powerful routing features in Next.js 15: catch-all segments and optional catch-all segments. These features allow you to create dynamic routes that can handle multiple URL segments.
+
+### Catch-all Segments (`[...slug]`)
+
+Catch-all segments allow you to match dynamic routes with multiple segments. They are denoted by using `[...paramName]` in the folder name.
+
+#### Example Structure
+```
+app/shop/[...slug]/page.tsx
+```
+
+#### How it Works
+- The `[...slug]` syntax will match any number of segments after `/shop/`
+- The matched segments will be available in the `params` object as an array
+- For example:
+  - `/shop/clothes` → `params.slug = ['clothes']`
+  - `/shop/clothes/shirts` → `params.slug = ['clothes', 'shirts']`
+  - `/shop/clothes/shirts/casual` → `params.slug = ['clothes', 'shirts', 'casual']`
+
+#### Implementation Example
+```typescript
+export default async function Page({ params }: { params: { slug: string[] } }) {
+  return (
+    <div>
+      <h1>You&apos;re viewing: {params.slug.join(" / ")}</h1>
+    </div>
+  );
+}
+```
+
+### Optional Catch-all Segments (`[[...slug]]`)
+
+Optional catch-all segments are similar to catch-all segments but can match zero or more segments. They are denoted by using `[[...paramName]]` in the folder name.
+
+#### Example Structure
+```
+app/shop/[[...slug]]/page.tsx
+```
+
+#### How it Works
+- The `[[...slug]]` syntax will match any number of segments after `/shop/`, including no segments
+- The matched segments will be available in the `params` object as an optional array
+- For example:
+  - `/shop` → `params.slug = undefined`
+  - `/shop/clothes` → `params.slug = ['clothes']`
+  - `/shop/clothes/shirts` → `params.slug = ['clothes', 'shirts']`
+
+#### Implementation Example
+```typescript
+interface PageProps {
+  params: {
+    slug?: string[];
+  };
+}
+
+export default async function Page({ params }: PageProps) {
+  // Handle the case when slug is undefined (root /shop route)
+  if (!params.slug) {
+    return (
+      <div>
+        <h1>Welcome to our Shop</h1>
+        <p>Browse our categories or use the search bar above.</p>
+      </div>
+    );
+  }
+
+  // Handle the case when we have slug segments
+  return (
+    <div>
+      <h1>You&apos;re viewing: {params.slug.join(" / ")}</h1>
+      <p>Category path: {params.slug.join(" > ")}</p>
+    </div>
+  );
+}
+```
+
+### Key Differences
+
+1. **Catch-all Segments (`[...slug]`)**
+   - Must match at least one segment
+   - `params.slug` is always an array
+   - Will not match the parent route
+
+2. **Optional Catch-all Segments (`[[...slug]]`)**
+   - Can match zero or more segments
+   - `params.slug` is optional (can be undefined)
+   - Will match the parent route
+
+### Best Practices
+
+1. Use catch-all segments when you need to ensure at least one segment is present
+2. Use optional catch-all segments when you want to handle both the parent route and its children
+3. Always handle the case where `params.slug` might be undefined when using optional catch-all segments
+4. Consider using TypeScript to properly type your params object
+
+For more information about dynamic routes in Next.js, visit the [official documentation](https://nextjs.org/docs/app/building-your-application/routing/dynamic-routes).
 
 ##########################################################################
 
