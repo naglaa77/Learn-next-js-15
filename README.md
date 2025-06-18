@@ -1,4 +1,23 @@
-This is a Next.js project bootstrapped with create-next-app.
+# 🚀 Welcome to PyroCode Dev - Next.js 15 Mastery Series
+
+## 📺 About This Series
+Welcome to my comprehensive Next.js 15 tutorial series! I'm your host, and I'm excited to guide you through mastering Next.js 15, from fundamental concepts to advanced implementations.
+
+## 🎯 What You'll Learn
+- Modern React development with Next.js 15
+- Server and Client Components
+- Advanced routing techniques
+- Performance optimization
+- Best practices and real-world applications
+
+## 📚 Series Structure
+Each episode is carefully crafted to build upon previous knowledge, ensuring a smooth learning curve. We'll cover everything from basic setup to complex features, with practical examples and real-world scenarios.
+
+## 🔥 Why Next.js 15?
+Next.js 15 brings revolutionary features that transform how we build web applications. Through this series, you'll learn how to leverage these features to create fast, scalable, and maintainable applications.
+
+## 🎬 Watch the Full Series
+Subscribe to my YouTube channel for the complete tutorial series: [PyroCode Dev](https://www.youtube.com/@pyrocode-dev)
 
 Getting Started
 First, run the development server:
@@ -965,6 +984,10 @@ For more information about dynamic routes in Next.js, visit the [official docume
 
 # 🎬 Episode 14: Creating a Custom 404 Page with Next.js App Router
 
+## 📺 YouTube Tutorial Series
+This is part of my YouTube series where I explain Next.js 15 from basics to mastery. 
+Check out my channel for more tutorials: [PyroCode Dev](https://www.youtube.com/@pyrocode-dev)
+
 ## 🎙️ Intro
 Hey everyone! In this episode, we'll explore how to create a custom 404 page using the App Router in Next.js, and how to trigger it programmatically — all with a real-world example from our product page.
 
@@ -1055,7 +1078,7 @@ export default async function ProductPageDetail({
 ```
 
 ## 🎯 Step 3 – Creating a Product-Specific 404 Page
-We can also create a custom 404 page specifically for products. Create a new file at `app/(front)/products/[id]/not-found.jsx`:
+We can also create a custom 404 page specifically for products. Creparts file at `app/(front)/products/[id]/not-fpartsx`:
 
 ```jsx
 "use client";
@@ -1069,13 +1092,13 @@ export default function NotFound() {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center p-8 bg-white rounded-lg shadow-lg">
+      <div className="text-center ps8 bg-white rounded-lg shadow-lg">
         <h1 className="text-6xl font-bold text-gray-800 mb-4">404</h1>
-        <h2 className="text-2xl font-semibold text-gray-600 mb-4">
+        <h2 className="text-2xl font-semibold text-gray-">
           Page Not Found for this product: {productId}
         </h2>
         <p className="text-gray-500 mb-6">
-          Sorry, the page you are looking for
+          Sorry, the page youHomefor
         </p>
         <a
           href="/products"
@@ -1092,7 +1115,7 @@ export default function NotFound() {
 This product-specific 404 page:
 - Uses the `usePathname` hook to get the current URL
 - Extracts the product ID from the URL
-- Shows a custom message mentioning the specific product ID that wasn't found
+- Shows a ustom message mentioning the specific product ID that wasn't found
 - Maintains the same clean design as our main 404 page
 
 🧠 So instead of showing a fallback message like "Product not found," we now automatically redirect to our custom 404 page.
