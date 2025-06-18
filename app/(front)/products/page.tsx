@@ -2,6 +2,9 @@ import Link from "next/link";
 import { products } from "@/data/products";
 
 export default function ProductsPage() {
+
+
+
   return (
     <div className="p-4">
       <Link href="/" className="underline text-blue-600">

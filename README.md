@@ -963,3 +963,143 @@ For more information about dynamic routes in Next.js, visit the [official docume
 
 ##########################################################################
 
+# 🎬 Episode 14: Creating a Custom 404 Page with Next.js App Router
+
+## 🎙️ Intro
+Hey everyone! In this episode, we'll explore how to create a custom 404 page using the App Router in Next.js, and how to trigger it programmatically — all with a real-world example from our product page.
+
+## 🧱 Step 1 – Creating not-found.jsx
+Let's first replace the boring default 404 page with a custom styled one.
+
+Inside your `/app` directory, create a file named:
+👉 `not-found.jsx`
+
+This is a special filename in Next.js — it tells the framework to use this file whenever a route isn't found.
+
+Here's what I added inside:
+
+```jsx
+export default function NotFound() {
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="text-center p-8 bg-white rounded-lg shadow-lg">
+        <h1 className="text-6xl font-bold text-gray-800 mb-4">404</h1>
+        <h2 className="text-2xl font-semibold text-gray-600 mb-4">Page Not Found</h2>
+        <p className="text-gray-500 mb-6">
+          Sorry, the page you are looking for does not exist.
+        </p>
+        <a
+          href="/"
+          className="inline-block bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors"
+        >
+          Go Back Home
+        </a>
+      </div>
+    </div>
+  );
+}
+```
+
+✅ This layout is clean, centered, and matches the rest of my site's design using Tailwind CSS.
+
+## 🚨 Step 2 – Triggering 404 for Invalid Product ID
+Now let's make it functional.
+In my project, I have dynamic product pages like: `/products/1`, `/products/2`, etc.
+
+Let's say I want to show the 404 page if someone types an invalid product ID.
+
+So, in `app/products/[id]/page.tsx`, I'll import the `notFound` function from Next.js:
+
+```tsx
+import { notFound } from "next/navigation";
+```
+
+Here's my updated ProductPageDetail component:
+
+```tsx
+import Link from "next/link";
+import { notFound } from "next/navigation";
+import { products } from "@/data/products";
+
+export async function generateStaticParams() {
+  console.log("Generating static pages for products...");
+  return products.map((product) => ({
+    id: product.id,
+  }));
+}
+
+export default async function ProductPageDetail({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const product = products.find((p) => p.id === id);
+
+  if (!product) {
+    notFound(); // ⛔ Show 404 if product doesn't exist
+  }
+
+  return (
+    <div>
+      <Link href="/products" className="underline text-blue-600">
+        Products Page
+      </Link>
+      <div className="p-4">
+        <h1 className="text-2xl font-bold">{product.name}</h1>
+        <p className="mt-2 text-gray-700">{product.description}</p>
+      </div>
+    </div>
+  );
+}
+```
+
+## 🎯 Step 3 – Creating a Product-Specific 404 Page
+We can also create a custom 404 page specifically for products. Create a new file at `app/(front)/products/[id]/not-found.jsx`:
+
+```jsx
+"use client";
+
+import { usePathname } from "next/navigation";
+
+export default function NotFound() {
+  const path = usePathname();
+  const segments  = path.split("/");
+  const productId = segments[2];
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="text-center p-8 bg-white rounded-lg shadow-lg">
+        <h1 className="text-6xl font-bold text-gray-800 mb-4">404</h1>
+        <h2 className="text-2xl font-semibold text-gray-600 mb-4">
+          Page Not Found for this product: {productId}
+        </h2>
+        <p className="text-gray-500 mb-6">
+          Sorry, the page you are looking for
+        </p>
+        <a
+          href="/products"
+          className="inline-block bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors"
+        >
+          Go Back products page
+        </a>
+      </div>
+    </div>
+  );
+}
+```
+
+This product-specific 404 page:
+- Uses the `usePathname` hook to get the current URL
+- Extracts the product ID from the URL
+- Shows a custom message mentioning the specific product ID that wasn't found
+- Maintains the same clean design as our main 404 page
+
+🧠 So instead of showing a fallback message like "Product not found," we now automatically redirect to our custom 404 page.
+
+## ✅ Recap
+- 🧩 We created a `not-found.jsx` page with a custom design.
+- ⚙️ We used `notFound()` to trigger that page programmatically when the product ID is invalid.
+- 🎯 We added a product-specific 404 page that shows which product ID wasn't found.
+- 💡 This approach keeps your UX clean and consistent with the rest of your app
+
