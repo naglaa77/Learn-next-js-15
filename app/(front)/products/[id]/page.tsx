@@ -1,5 +1,6 @@
 import Link from "next/link";
 import { products } from "@/data/products";
+import { notFound } from "next/navigation";
 
 export async function generateStaticParams() {
   console.log("Generating static pages for products...");
@@ -17,11 +18,7 @@ export default async function ProductPageDetail({
   const product = products.find((p) => p.id === id);
 
   if (!product) {
-    return (
-      <div className="p-4">
-        <h1 className="text-2xl font-bold text-red-600">Product not found</h1>
-      </div>
-    );
+    notFound();
   }
 
   return (

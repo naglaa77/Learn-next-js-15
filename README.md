@@ -995,28 +995,32 @@ Hey everyone! In this episode, we'll explore how to create a custom 404 page usi
 Let's first replace the boring default 404 page with a custom styled one.
 
 Inside your `/app` directory, create a file named:
-👉 `not-found.jsx`
+👉 `not-found.tsx`
 
 This is a special filename in Next.js — it tells the framework to use this file whenever a route isn't found.
 
 Here's what I added inside:
 
 ```jsx
+import Link from "next/link";
+
 export default function NotFound() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
       <div className="text-center p-8 bg-white rounded-lg shadow-lg">
         <h1 className="text-6xl font-bold text-gray-800 mb-4">404</h1>
-        <h2 className="text-2xl font-semibold text-gray-600 mb-4">Page Not Found</h2>
+        <h2 className="text-2xl font-semibold text-gray-600 mb-4">
+          Page Not Found
+        </h2>
         <p className="text-gray-500 mb-6">
           Sorry, the page you are looking for does not exist.
         </p>
-        <a
+        <Link
           href="/"
           className="inline-block bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors"
         >
           Go Back Home
-        </a>
+        </Link>
       </div>
     </div>
   );
@@ -1078,44 +1082,68 @@ export default async function ProductPageDetail({
 ```
 
 ## 🎯 Step 3 – Creating a Product-Specific 404 Page
-We can also create a custom 404 page specifically for products. Creparts file at `app/(front)/products/[id]/not-fpartsx`:
+We can also create a custom 404 page specifically for products. Create parts file at `app/(front)/products/[id]/not-found.tsx`:
+
 
 ```jsx
-"use client";
+import Link from "next/link";
 
-import { usePathname } from "next/navigation";
 
 export default function NotFound() {
-  const path = usePathname();
-  const segments  = path.split("/");
-  const productId = segments[2];
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-100">
-      <div className="text-center ps8 bg-white rounded-lg shadow-lg">
+      <div className="text-center p-8 bg-white rounded-lg shadow-lg">
         <h1 className="text-6xl font-bold text-gray-800 mb-4">404</h1>
-        <h2 className="text-2xl font-semibold text-gray-">
-          Page Not Found for this product: {productId}
+        <h2 className="text-2xl font-semibold text-gray-600 mb-4">
+          Page Not Found for this product
         </h2>
-        <p className="text-gray-500 mb-6">
-          Sorry, the page youHomefor
-        </p>
-        <a
+        <Link
           href="/products"
           className="inline-block bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors"
         >
           Go Back products page
-        </a>
+        </Link>
       </div>
     </div>
   );
 }
 ```
 
+```jsx
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+export default function NotFound() {
+  const path = usePathname();
+  const segments = path.split("/");
+  const productId = segments[2];
+
+  return (
+    <div className="min-h-screen flex items-center justify-center bg-gray-100">
+      <div className="text-center p-8 bg-white rounded-lg shadow-lg">
+        <h1 className="text-6xl font-bold text-gray-800 mb-4">404</h1>
+        <h2 className="text-2xl font-semibold text-gray-600 mb-4">
+          Page Not Found for this product
+        </h2>
+        <Link
+          href="/products"
+          className="inline-block bg-blue-500 text-white px-6 py-2 rounded-md hover:bg-blue-600 transition-colors"
+        >
+          Go Back products page
+        </Link>
+      </div>
+    </div>
+  );
+}
+
+```
+
 This product-specific 404 page:
 - Uses the `usePathname` hook to get the current URL
 - Extracts the product ID from the URL
-- Shows a ustom message mentioning the specific product ID that wasn't found
+- Shows a custom message mentioning the specific product ID that wasn't found
 - Maintains the same clean design as our main 404 page
 
 🧠 So instead of showing a fallback message like "Product not found," we now automatically redirect to our custom 404 page.
