@@ -1341,3 +1341,213 @@ If this helped, like and subscribe — and in the next episode, we'll cover anot
 
 Let me know if you want this turned into a visual tutorial or with code snippets ready to paste in your project!
 
+##########################################################################
+
+# 🎬 Episode 16: Routing Metadata in Next.js 15
+
+## 📺 YouTube Tutorial Series
+This is part of my YouTube series where I explain Next.js 15 from basics to mastery. 
+Check out my channel for more tutorials: [PyroCode Dev](https://www.youtube.com/@pyrocode-dev)
+
+## 🎙️ Introduction to SEO with Next.js
+Let's talk about search engine optimization and how Next.js can help us get it right. The metadata API in Next.js is a powerful feature that lets us define metadata for each page, making sure our content looks great when it is shared or indexed by search engines.
+
+The App Router gives us two ways to handle metadata in `layout.tsx` or `page.tsx` files:
+- Export a static metadata object
+- Export a dynamic `generateMetadata` function
+
+## 🧠 Understanding Metadata in Next.js
+
+Before we dive in, here are the key points you need to know about configuring routing metadata:
+
+- Both `layout.tsx` and `page.tsx` can export metadata
+- Layout metadata applies to all its pages while page metadata is specific to that page
+- Metadata follows a top-down order starting from the root level
+- When metadata exists in multiple places along the route, they merge together with page metadata overriding layout metadata for matching properties
+
+## 🔧 Static Metadata Configuration
+
+Let's jump in and start with the static metadata object approach. We'll keep the existing metadata in root `layout.tsx` file:
+
+```typescript
+// app/layout.tsx
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "Learn Next.js 15",
+  description: "A comprehensive guide to learning Next.js 15",
+};
+```
+
+In our about route's `page.tsx`, export a metadata object:
+
+```typescript
+// app/(front)/about/page.tsx
+import Link from "next/link";
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
+  title: "About Code Evolution",
+  description: "Learn about our journey in Next.js development",
+};
+
+export default function AboutPage() {
+  return (
+    <div>
+      <Link href="/" className="text-blue-600 block mt-4">
+        Return to Home Page
+      </Link>
+      <p className="text-2xl text-green-700 mt-10">About Page</p>
+    </div>
+  );
+}
+```
+
+While both layout and page can have metadata, the page's metadata takes priority when they overlap. Let's check this out in the browser:
+
+- Looking at the home page's elements panel, you'll see the title "Learn Next.js 15" and description "A comprehensive guide to learning Next.js 15" - this comes from our `layout.tsx` metadata
+- When we go to `/about`, notice how the title changes to "About Code Evolution" while keeping the same description
+- This happens because when routes have multiple metadata objects, they merge together with deeper segments taking priority
+- Since the about page is deeper than the root layout, its title overwrites the layout's title
+- The description stays the same because it wasn't overwritten - it was never defined in `page.tsx`
+
+This pattern works the same way no matter how deeply nested layouts and pages are, and this is how static metadata object configuration works in Next.js.
+
+## ⚡ Dynamic Metadata Configuration
+
+Dynamic metadata comes in handy when your metadata depends on dynamic information like current route parameters, external data, or metadata defined in parent segments. You can define it by exporting a `generateMetadata` function from a `layout.tsx` or `page.tsx` file.
+
+Perfect example is a dynamic route like product ID. Instead of having the same title for every product (which would happen with a static metadata object), we can make it unique for each product.
+
+Here's how we set up the `generateMetadata` function in our product page:
+
+```typescript
+// app/(front)/products/[id]/page.tsx
+import Link from "next/link";
+import { products } from "@/data/products";
+import { notFound } from "next/navigation";
+import type { Metadata } from "next";
+
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const product = products.find((p) => p.id === id);
+
+  if (!product) {
+    return {
+      title: "Product Not Found",
+    };
+  }
+
+  return {
+    title: `Product ${product.name}`,
+    description: product.description,
+  };
+}
+
+export async function generateStaticParams() {
+  console.log("Generating static pages for products...");
+  return products.map((product) => ({
+    id: product.id,
+  }));
+}
+
+export default async function ProductPageDetail({
+  params,
+}: {
+  params: Promise<{ id: string }>;
+}) {
+  const { id } = await params;
+  const product = products.find((p) => p.id === id);
+
+  if (!product) {
+    notFound();
+  }
+
+  return (
+    <div>
+      <Link href="/products" className="underline text-blue-600">
+        Products Page
+      </Link>
+      <div className="p-4">
+        <h1 className="text-2xl font-bold">{product.name}</h1>
+        <p className="mt-2 text-gray-700">{product.description}</p>
+      </div>
+    </div>
+  );
+}
+```
+
+Now if we head back to the browser and visit `/products/1`, inspect the title - we can see it is "Product iPhone 15". Navigate to `/products/2` and we can see the title "Product Galaxy S24".
+
+For this simple example, we're using the product name directly in our title. However, in a real e-commerce application where you might have a product catalog, you could fetch the product details within this function and set the title accordingly.
+
+Here's an example with async data fetching:
+
+```typescript
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  
+  // Simulate API call
+  const title = await new Promise<string>((resolve) => {
+    setTimeout(() => {
+      resolve(`iPhone ${id}`);
+    }, 100);
+  });
+
+  return {
+    title: `Product ${title}`,
+    description: `Latest product with ID ${id}`,
+  };
+}
+```
+
+In the browser, if we navigate to `/products/1`, we can see the title is "Product iPhone 1". This is how you configure dynamic routing metadata in Next.js.
+
+One important point I should mention is that you can't use both a metadata object and `generateMetadata` function in the same route segment - it is one or the other.
+
+## 🚫 Handling Metadata in Client Components
+
+There is one crucial limitation you need to be aware of when working with metadata: it will not work in pages that are marked with the `"use client"` directive.
+
+
+
+## 🎯 Best Practices for Metadata in Next.js
+
+1. **Use Static Metadata When:**
+   - Content is static and doesn't change
+   - You have simple, predictable metadata
+   - Performance is critical
+
+2. **Use Dynamic Metadata When:**
+   - Content depends on route parameters
+   - You need to fetch data for metadata
+   - SEO is important for dynamic content
+
+3. **Always Keep Metadata in Server Components:**
+   - Never export metadata from client components
+   - Extract client-side logic into separate components
+   - Use the pattern shown above for complex pages
+
+4. **Follow the Hierarchy:**
+   - Root layout metadata applies to all pages
+   - Page-specific metadata overrides layout metadata
+   - Deeper routes take priority over parent routes
+
+## ✅ Recap
+
+- 🧩 We learned how to configure static metadata objects
+- ⚡ We explored dynamic metadata with `generateMetadata` function
+- 🚫 We understood the limitations with client components
+- ✅ We implemented the correct pattern for complex pages
+- 🎯 We covered best practices for SEO and performance
+
+This approach ensures your Next.js 15 application has proper SEO, great social media sharing, and optimal search engine indexing!
+
+🔗 [GitHub Source Code for the Series](https://github.com/naglaa77/Learn-next-js-15)
+
+##########################################################################
+

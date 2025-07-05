@@ -2,12 +2,12 @@ import Link from "next/link";
 import { products } from "@/data/products";
 import { notFound } from "next/navigation";
 
-export async function generateStaticParams() {
-  console.log("Generating static pages for products...");
-  return products.map((product) => ({
-    id: product.id,
-  }));
-}
+// export async function generateStaticParams() {
+//   console.log("Generating static pages for products...");
+//   return products.map((product) => ({
+//     id: product.id,
+//   }));
+// }
 
 export default async function ProductPageDetail({
   params,
