@@ -1387,8 +1387,8 @@ import Link from "next/link";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "About Code Evolution",
-  description: "Learn about our journey in Next.js development",
+  title: "About page",
+  description: "Learn about ",
 };
 
 export default function AboutPage() {
@@ -1483,29 +1483,6 @@ export default async function ProductPageDetail({
 
 Now if we head back to the browser and visit `/products/1`, inspect the title - we can see it is "Product iPhone 15". Navigate to `/products/2` and we can see the title "Product Galaxy S24".
 
-For this simple example, we're using the product name directly in our title. However, in a real e-commerce application where you might have a product catalog, you could fetch the product details within this function and set the title accordingly.
-
-Here's an example with async data fetching:
-
-```typescript
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
-  const { id } = await params;
-  
-  // Simulate API call
-  const title = await new Promise<string>((resolve) => {
-    setTimeout(() => {
-      resolve(`iPhone ${id}`);
-    }, 100);
-  });
-
-  return {
-    title: `Product ${title}`,
-    description: `Latest product with ID ${id}`,
-  };
-}
-```
-
-In the browser, if we navigate to `/products/1`, we can see the title is "Product iPhone 1". This is how you configure dynamic routing metadata in Next.js.
 
 One important point I should mention is that you can't use both a metadata object and `generateMetadata` function in the same route segment - it is one or the other.
 
