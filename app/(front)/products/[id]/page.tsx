@@ -1,13 +1,28 @@
 import Link from "next/link";
 import { products } from "@/data/products";
 import { notFound } from "next/navigation";
+import { Metadata } from "next";
 
-// export async function generateStaticParams() {
-//   console.log("Generating static pages for products...");
-//   return products.map((product) => ({
-//     id: product.id,
-//   }));
-// }
+type Props = {
+  params: Promise<{ id: string }>;
+};
+
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  const { id } = await params;
+  const product = products.find((p) => p.id === id);
+
+  if (!product) {
+    return {
+      title: "Product Not Found",
+    };
+  }
+
+  return {
+    title: `Product ${product.name}`,
+    description: product.description,
+  };
+}
+
 
 export default async function ProductPageDetail({
   params,
