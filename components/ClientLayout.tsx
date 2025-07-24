@@ -1,5 +1,3 @@
-"use client";
-
 import { HydrationFix } from "./HydrationFix";
 import Navbar from "@/components/Navbar";
 // import Cart from "@/components/Cart";

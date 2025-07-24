@@ -1528,3 +1528,128 @@ This approach ensures your Next.js 15 application has proper SEO, great social m
 
 ##########################################################################
 
+
+##########################################################################
+
+# 🎬 Episode 17: Active Link Highlight in Next.js 15 Navbar
+
+## 📺 YouTube Tutorial Series
+This is part of my YouTube series where I explain Next.js 15 from basics to mastery. 
+Check out my channel for more tutorials: [PyroCode Dev](https://www.youtube.com/@pyrocode-dev)
+
+## 🎙️ Intro
+In this episode, we'll learn how to highlight the active navigation link in your Next.js 15 app using the `usePathname` hook. This is a common feature in modern web apps, making it clear to users which page they're currently on.
+
+## 🧠 Why Use usePathname?
+The `usePathname` hook from `next/navigation` allows you to access the current URL path in a Client Component. This makes it easy to compare the current path to your navigation links and apply a special style to the active one.
+
+## 🛠️ Step-by-Step: Active Link in Navbar
+
+### 1. Update Your Navbar to a Client Component
+Add the `"use client"` directive at the top of your Navbar component so you can use hooks:
+
+```tsx
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+ const links = [
+    { name: "Dashboard", url: "/dashboard" },
+    { name: "About", url: "/about" },
+    { name: "Products", url: "/products" },
+  ];
+
+export default function Navbar() {
+
+  const pathname = usePathname();
+ 
+  return (
+    <nav className="bg-white shadow-md p-4">
+      <div className="container mx-auto flex justify-between items-center">
+        <Link href="/" className="text-xl font-bold">
+          My App
+        </Link>
+        <div className="space-x-4">
+          {links.map((link) => (
+            <Link
+              key={link.url}
+              href={link.url}
+              className={`text-blue-600 hover:text-blue-800 ${
+                pathname === link.url ? "font-bold underline text-black" : ""
+              }`}
+            >
+              {link.name}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </nav>
+  );
+}
+```
+
+### 2. How It Works
+- `usePathname()` gives you the current path (e.g., `/about` or `/products`).
+- When mapping over your links, compare `pathname` to each link's `url`.
+- If they match, add extra classes (like `font-bold underline text-black`) to highlight the active link.
+- Otherwise, use the default styling.
+
+### 3. Customizing the Active State
+You can change the active link style to fit your design. For example, you might use a different background, border, or color.
+
+### 4. Full Example
+Here's the full Navbar component with active link support:
+
+```tsx
+"use client";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+
+export default function Navbar() {
+  const pathname = usePathname();
+  const links = [
+    { name: "Dashboard", url: "/dashboard" },
+    { name: "About", url: "/about" },
+    { name: "Products", url: "/products" },
+  ];
+
+  return (
+    <nav className="bg-white shadow-md p-4">
+      <div className="container mx-auto flex justify-between items-center">
+        <Link href="/" className="text-xl font-bold">
+          My App
+        </Link>
+        <div className="space-x-4">
+          {links.map((link) => (
+            <Link
+              key={link.url}
+              href={link.url}
+              className="text-blue-600 hover:text-blue-800"
+            >
+              {link.name}
+            </Link>
+          ))}
+        </div>
+      </div>
+    </nav>
+  );
+}
+```
+
+## 🧪 Test It!
+- Navigate to `/dashboard`, `/about`, or `/products`.
+- The corresponding link in the navbar will be bold, underlined, and black, indicating it's the active page.
+
+## 🧠 Pro Tips
+- For dynamic routes (like `/products/1`), you may want to use `pathname.startsWith(link.url)` for partial matches.
+- You can extract the active link logic into a helper function for more complex scenarios.
+
+## ✅ Recap
+- We used `usePathname` to detect the current route.
+- We mapped over an array of link objects to render the navbar.
+- We applied a special style to the active link for better UX.
+
+This approach keeps your navigation DRY, scalable, and user-friendly!
+
+##########################################################################
+
